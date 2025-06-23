@@ -5,6 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tugas Besar - E-commerce</title>
     <style>
+        /* Definisi Variabel CSS (Menggunakan skema warna admin untuk semua) */
+        :root {
+            --primary-color: #2c3e50; /* Darker blue-grey */
+            --secondary-color: #34495e; /* Even darker blue-grey */
+            --accent-color: #4a69bd; /* Brighter blue for highlights */
+            --text-color: #2d3748;
+            --header-text-color: #2d3748;
+            --background-gradient-start: #34495e; /* Darker background */
+            --background-gradient-end: #2c3e50;
+            --container-bg: #fdfdfd;
+            --table-header-bg: #eceff1;
+            --card-shadow: rgba(0,0,0,0.2);
+            --curve-stroke: rgba(52, 73, 94, 0.2);
+            --curve-stroke-2: rgba(44, 62, 80, 0.15);
+            --product-price-color: #3498db; /* Admin-specific price color */
+            --button-shadow: rgba(44, 62, 80, 0.4);
+            --info-box-bg: #e0f2f7; /* Light blue for info box */
+            --info-box-border: #81d4fa; /* Accent blue for info box border */
+            --alert-success-bg: #d4edda;
+            --alert-success-color: #155724;
+            --alert-success-border: #c3e6cb;
+            --alert-error-bg: #f8d7da;
+            --alert-error-color: #721c24;
+            --alert-error-border: #f5c6cb;
+        }
+
+        /* Hapus atau nonaktifkan blok .theme-admin dan .theme-user */
+        /* body.theme-admin { ... } */
+        /* body.theme-user { ... } */
+
+
         * {
             margin: 0;
             padding: 0;
@@ -13,21 +44,145 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--background-gradient-start) 0%, var(--background-gradient-end) 100%);
             min-height: 100vh;
             padding: 20px;
-            color: #333;
+            color: var(--text-color);
+            transition: background 0.5s ease; /* Smooth transition for background */
         }
+
+        /* START: Gaya untuk Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+            color: white;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none; /* Make it unclickable when hidden */
+        }
+
+        .loading-content {
+            text-align: center;
+            animation: fadeInScale 1.5s ease-out forwards;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .loading-spinner-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-icon {
+            position: absolute;
+            font-size: 5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .loading-icon.box-icon {
+            opacity: 0;
+            animation: bounceIn 1s ease-out 0.5s forwards;
+            transform: translateY(-20px);
+        }
+
+        .loading-icon.cart-icon {
+            opacity: 0;
+            animation: slideInFromRight 1s ease-out 0.8s forwards;
+            font-size: 3rem; /* Slightly smaller for cart */
+            color: rgba(255, 255, 255, 0.6);
+            transform: translateX(30px);
+        }
+        
+        .loading-icon.circle-spinner {
+            border: 5px solid rgba(255,255,255,0.2);
+            border-top: 5px solid white;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 1.5s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .loading-text {
+            font-size: 3.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            animation: textPulse 2s infinite alternate;
+        }
+
+        .loading-slogan {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            letter-spacing: 0.5px;
+            animation: fadeIn 2s ease-in-out 1s forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInScale {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: translateY(-100px) scale(0.5); }
+            60% { opacity: 1; transform: translateY(10px) scale(1.1); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        @keyframes slideInFromRight {
+            0% { opacity: 0; transform: translateX(100px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes textPulse {
+            0% { transform: scale(1); text-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+            100% { transform: scale(1.03); text-shadow: 0 8px 20px rgba(0,0,0,0.5); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* END: Gaya untuk Loading Screen */
+
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: var(--container-bg);
             border-radius: 15px;
             padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 40px var(--card-shadow);
             position: relative;
             overflow: hidden;
+            transition: background 0.5s ease, box-shadow 0.5s ease; /* Smooth transition */
         }
 
         .header {
@@ -39,19 +194,20 @@
         }
 
         .header h1 {
-            color: #333;
+            color: var(--header-text-color);
             font-size: 2.5rem;
             margin-bottom: 15px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 700;
             position: relative;
             z-index: 2;
+            transition: background 0.5s ease; /* Smooth transition */
         }
 
         .user-info {
-            background: #f8f9fa;
+            background: #f8f9fa; /* Ini tetap bisa disesuaikan jika ingin sedikit beda dari container-bg */
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
@@ -81,20 +237,22 @@
             width: 100%;
             height: 100%;
             fill: none;
-            stroke: rgba(118, 75, 162, 0.15);
+            stroke: var(--curve-stroke);
             stroke-width: 2;
             stroke-dasharray: 10, 5;
+            transition: stroke 0.5s ease; /* Smooth transition */
         }
         
         .curve-path-2 {
-            stroke: rgba(102, 126, 234, 0.1);
+            stroke: var(--curve-stroke-2);
             stroke-dasharray: 15, 10;
             top: 20px;
+            transition: stroke 0.5s ease; /* Smooth transition */
         }
 
         .nav-menu {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 11fr)); /* Adjusted to fit 5 items better */
             gap: 20px;
             margin-bottom: 30px;
             position: relative;
@@ -102,7 +260,7 @@
         }
 
         .nav-item {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             color: white;
             padding: 20px;
             border-radius: 10px;
@@ -113,18 +271,18 @@
             font-size: 1.1rem;
             font-weight: 600;
             letter-spacing: 0.5px;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px var(--button-shadow);
         }
 
         .nav-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 25px var(--button-shadow);
         }
 
         .content {
             min-height: 400px;
             padding: 30px;
-            background: #f8f9fa;
+            background: #f8f9fa; /* Keep content area light */
             border-radius: 10px;
             margin-top: 20px;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
@@ -133,7 +291,7 @@
         }
 
         .section-title {
-            color: #4a5568;
+            color: var(--header-text-color);
             font-size: 1.8rem;
             margin-bottom: 25px;
             padding-bottom: 10px;
@@ -148,7 +306,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #4a5568;
+            color: var(--header-text-color);
             font-size: 1.1rem;
         }
 
@@ -164,12 +322,13 @@
 
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            border-color: var(--primary-color);
+            /* Karena kita tidak punya primary-color-rgb, gunakan rgba dengan warna primer sebagai basis */
+            box-shadow: 0 0 0 3px rgba(74, 105, 189, 0.2); /* Menggunakan accent-color atau sesuaikan */
         }
 
         .btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             color: white;
             padding: 14px 30px;
             border: none;
@@ -196,18 +355,33 @@
         }
 
         .btn-danger {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            background: linear-gradient(45deg, #e74c3c, #c0392b); /* Merah yang konsisten */
+            box-shadow: 0 4px 6px rgba(231, 76, 60, 0.3);
+        }
+        .btn-danger:hover {
+             box-shadow: 0 7px 14px rgba(231, 76, 60, 0.4);
         }
 
         .btn-outline {
             background: transparent;
-            border: 2px solid #667eea;
-            color: #667eea;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            box-shadow: none;
         }
 
         .btn-outline:hover {
-            background: #667eea;
+            background: var(--primary-color);
             color: white;
+            box-shadow: 0 4px 6px var(--button-shadow); /* Tambahkan shadow saat hover */
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, #27ae60, #229a53); /* Hijau yang konsisten */
+            color: white;
+            box-shadow: 0 4px 6px rgba(39, 174, 96, 0.3);
+        }
+        .btn-success:hover {
+            box-shadow: 0 7px 14px rgba(39, 174, 96, 0.4);
         }
 
         .btn-group {
@@ -234,9 +408,9 @@
         }
 
         .table th {
-            background: #f8f9fa;
+            background: var(--table-header-bg);
             font-weight: 700;
-            color: #4a5568;
+            color: var(--header-text-color);
             text-transform: uppercase;
             font-size: 0.9rem;
             letter-spacing: 0.5px;
@@ -255,7 +429,7 @@
             border-radius: 12px;
             overflow: hidden;
             margin-bottom: 25px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 20px var(--card-shadow);
             transition: transform 0.3s ease;
             height: 100%;
             display: flex;
@@ -264,7 +438,7 @@
 
         .product-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+            box-shadow: 0 12px 25px var(--card-shadow);
         }
 
         .product-image {
@@ -284,18 +458,18 @@
         .product-title {
             font-size: 1.3rem;
             margin-bottom: 10px;
-            color: #2d3748;
+            color: var(--header-text-color);
         }
 
         .product-price {
             font-size: 1.25rem;
-            color: #667eea;
+            color: var(--product-price-color);
             font-weight: 700;
             margin: 10px 0;
         }
 
         .product-description {
-            color: #4a5568;
+            color: var(--text-color);
             line-height: 1.6;
             margin-bottom: 15px;
             flex-grow: 1;
@@ -314,15 +488,19 @@
             gap: 25px;
         }
 
-        .login-form {
+        .login-form-container {
             max-width: 450px;
-            margin: 0 auto;
-            background: white;
+            margin: 50px auto;
+            background: var(--container-bg);
             padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            box-shadow: 0 20px 40px var(--card-shadow);
             position: relative;
             z-index: 2;
+        }
+
+        .login-form-container h2 {
+            color: var(--header-text-color); /* Apply themed color to login/register titles */
         }
 
         .alert {
@@ -340,19 +518,20 @@
         }
 
         .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: var(--alert-success-bg);
+            color: var(--alert-success-color);
+            border: 1px solid var(--alert-success-border);
         }
 
         .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: var(--alert-error-bg);
+            color: var(--alert-error-color);
+            border: 1px solid var(--alert-error-border);
         }
 
+        /* Pastikan hidden class ada untuk menyembunyikan elemen */
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         .cart-item {
@@ -370,7 +549,7 @@
         .cart-total {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #2d3748;
+            color: var(--header-text-color);
             text-align: right;
             margin-top: 25px;
             padding: 15px;
@@ -383,7 +562,7 @@
             text-align: center;
             padding: 40px;
             font-size: 1.2rem;
-            color: #764ba2;
+            color: var(--secondary-color);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -392,24 +571,24 @@
         
         .loading-spinner {
             border: 5px solid #f3f3f3;
-            border-top: 5px solid #667eea;
+            border-top: 5px solid var(--primary-color);
             border-radius: 50%;
             width: 50px;
             height: 50px;
             animation: spin 1s linear infinite;
         }
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        /* @keyframes spin { /* Ini sudah ada di atas, jangan duplikasi jika sama */
+        /* 0% { transform: rotate(0deg); } */
+        /* 100% { transform: rotate(360deg); } */
+        /*} */
         
         .info-box {
-            background: #e3f2fd;
+            background: var(--info-box-bg);
             border-radius: 10px;
             padding: 20px;
             margin: 20px 0;
-            border-left: 4px solid #2196f3;
+            border-left: 4px solid var(--info-box-border);
         }
         
         .detail-card {
@@ -469,136 +648,323 @@
             margin-bottom: 25px;
             font-size: 1.1rem;
         }
-        
-        .demo-info {
-            margin-top: 20px;
-            padding: 15px;
-            background: #e6f7ff;
-            border-radius: 8px;
-            font-size: 14px;
-            border-left: 4px solid #1890ff;
+
+        /* Gaya baru untuk bagian promosi iklan */
+        .promotion-banner {
+            margin-bottom: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
         }
+
+        .promotion-banner img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .promotion-banner .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 15px;
+            font-size: 1.2rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Gaya untuk Modal Pop-up */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            transform: translateY(-50px);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .modal-overlay.visible .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-content h3 {
+            color: var(--header-text-color); /* Themed title for modal */
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .modal-content p {
+            font-size: 1.1rem;
+            color: #6a6a6a;
+            margin-bottom: 25px;
+        }
+
+        .modal-content .modal-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .modal-content .modal-icon.success {
+            color: #28a745;
+        }
+
+        .modal-content .modal-icon.error {
+            color: #dc3545;
+        }
+
+        .modal-content .modal-icon.info {
+            color: #007bff;
+        }
+
+        .modal-content .modal-icon.warning {
+            color: #ffc107;
+        }
+        
+        .modal-content .btn {
+            padding: 12px 25px;
+            font-size: 1rem;
+        }
+        .modal-content .btn + .btn {
+            margin-left: 10px;
+        }
+
+        /* Gaya baru untuk Landing Page */
+        .landing-page {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .landing-page::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            transform: rotate(45deg);
+        }
+        .landing-page::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            transform: rotate(-30deg);
+        }
+
+        .landing-page h2 {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+
+        .landing-page p {
+            font-size: 1.4rem;
+            max-width: 700px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .landing-page .btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .landing-page .btn {
+            padding: 18px 40px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            background: white; /* Button background should be white on landing page */
+            color: var(--primary-color); /* Text color should be primary color */
+            font-weight: bold;
+        }
+        .landing-page .btn:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+        }
+        .landing-page .btn-outline-landing {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            box-shadow: none;
+        }
+        .landing-page .btn-outline-landing:hover {
+            background: white;
+            color: var(--primary-color);
+        }
+
     </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-spinner-wrapper">
+                <i class="fas fa-box-open loading-icon box-icon"></i>
+                <i class="fas fa-shopping-cart loading-icon cart-icon"></i>
+                <div class="circle-spinner"></div>
+            </div>
+            <h2 class="loading-text">Toko Environment  </h2>
+            <p class="loading-slogan"></p>
+        </div>
+    </div>
     <div class="container">
-        <!-- Dekorasi ikal panjang horizontal -->
         <div class="horizontal-curve">
-            <svg class="curve-path" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M0,70 C150,120 350,0 600,70 C850,140 1050,0 1200,70 L1200,120 L0,120 Z"></path>
-            </svg>
-            <svg class="curve-path curve-path-2" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M0,60 C200,10 400,120 600,60 C800,0 1000,120 1200,60 L1200,120 L0,120 Z"></path>
-            </svg>
+            <svg class="curve-path" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,70 C150,120 350,0 600,70 C850,140 1050,0 1200,70 L1200,120 L0,120 Z"></path></svg>
+            <svg class="curve-path curve-path-2" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,60 C200,10 400,120 600,60 C800,0 1000,120 1200,60 L1200,120 L0,120 Z"></path></svg>
         </div>
 
-        <!-- Login Section -->
-        <div id="login-section">
-            <div class="login-form">
-                <h2 style="text-align: center; margin-bottom: 30px; color: #4a5568;">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </h2>
-                <div id="login-alert" class="hidden"></div>
+        <div id="landing-page-section" class="landing-page hidden">
+            <i class="fas fa-store-alt" style="font-size: 5rem; margin-bottom: 30px; color: rgba(255,255,255,0.9);"></i>
+            <h2>Selamat Datang di Toko Envi!</h2>
+            <p>Jelajahi berbagai pilihan produk elektronik berkualitas tinggi dengan penawaran terbaik. Login untuk pengalaman berbelanja penuh, atau lihat katalog kami sebagai tamu.</p>
+            <div class="btn-group">
+                <button class="btn" onclick="showLogin()"><i class="fas fa-sign-in-alt"></i> Login / Daftar</button>
+                <button class="btn btn-outline-landing" onclick="showCatalog()"><i class="fas fa-compass"></i> Jelajahi Produk</button>
+            </div>
+        </div>
+
+        <div id="auth-section" class="hidden">
+            <div id="login-form-container" class="login-form-container">
+                <h2 style="text-align: center; margin-bottom: 30px;"><i class="fas fa-sign-in-alt"></i> Login</h2>
+                <div id="login-alert-box"></div>
                 <form id="login-form">
-                    <div class="form-group">
-                        <label><i class="fas fa-user"></i> Username:</label>
-                        <input type="text" id="username" required placeholder="Masukkan username">
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-lock"></i> Password:</label>
-                        <input type="password" id="password" required placeholder="Masukkan password">
-                    </div>
-                    <button type="submit" class="btn" style="width: 100%; margin-top: 15px;">
-                        <i class="fas fa-sign-in-alt"></i> Login
-                    </button>
+                    <div class="form-group"><label><i class="fas fa-user"></i> Username:</label><input type="text" id="username" required placeholder="Masukkan username"></div>
+                    <div class="form-group"><label><i class="fas fa-lock"></i> Password:</label><input type="password" id="password" required placeholder="Masukkan password"></div>
+                    <button type="submit" class="btn" style="width: 100%;"><i class="fas fa-sign-in-alt"></i> Login</button>
                 </form>
-                <p style="text-align: center; margin-top: 25px; color: #4a5568;">
-                    Belum punya akun? <a href="#" onclick="showRegister()" style="color: #667eea; font-weight: 600;">Daftar di sini</a>
-                </p>
-                
+                <p style="text-align: center; margin-top: 25px; color: var(--text-color);">Belum punya akun? <a href="#" onclick="showRegister()" style="color: var(--primary-color); font-weight: 600;">Daftar di sini</a></p>
+                <p style="text-align: center; margin-top: 15px;"><a href="#" onclick="showGuestCatalogFromAuth()" style="color: #718096;">Kembali ke toko</a></p>
             </div>
-        </div>
 
-        <!-- Register Section -->
-        <div id="register-section" class="hidden">
-            <div class="login-form">
-                <h2 style="text-align: center; margin-bottom: 30px; color: #4a5568;">
-                    <i class="fas fa-user-plus"></i> Daftar Akun
-                </h2>
-                <div id="register-alert" class="hidden"></div>
+            <div id="register-form-container" class="login-form-container hidden">
+                <h2 style="text-align: center; margin-bottom: 30px;"><i class="fas fa-user-plus"></i> Daftar Akun</h2>
+                <div id="register-alert-box"></div>
                 <form id="register-form">
-                    <div class="form-group">
-                        <label><i class="fas fa-user"></i> Username:</label>
-                        <input type="text" id="reg-username" required placeholder="Masukkan username">
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-lock"></i> Password:</label>
-                        <input type="password" id="reg-password" required placeholder="Masukkan password">
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-envelope"></i> Email:</label>
-                        <input type="email" id="reg-email" required placeholder="Masukkan email">
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-id-card"></i> Nama Lengkap:</label>
-                        <input type="text" id="reg-name" required placeholder="Masukkan nama lengkap">
-                    </div>
-                    <button type="submit" class="btn" style="width: 100%; margin-top: 15px;">
-                        <i class="fas fa-user-plus"></i> Daftar
-                    </button>
+                    <div class="form-group"><label><i class="fas fa-user"></i> Username:</label><input type="text" id="reg-username" required></div>
+                    <div class="form-group"><label><i class="fas fa-lock"></i> Password:</label><input type="password" id="reg-password" required></div>
+                    <div class="form-group"><label><i class="fas fa-envelope"></i> Email:</label><input type="email" id="reg-email" required></div>
+                    <div class="form-group"><label><i class="fas fa-id-card"></i> Nama Lengkap:</label><input type="text" id="reg-name" required></div>
+                    <button type="submit" class="btn" style="width: 100%;"><i class="fas fa-user-plus"></i> Daftar</button>
                 </form>
-                <p style="text-align: center; margin-top: 25px; color: #4a5568;">
-                    Sudah punya akun? <a href="#" onclick="showLogin()" style="color: #667eea; font-weight: 600;">Login di sini</a>
-                </p>
+                <p style="text-align: center; margin-top: 25px; color: var(--text-color);">Sudah punya akun? <a href="#" onclick="showLogin()" style="color: var(--primary-color); font-weight: 600;">Login di sini</a></p>
+                <p style="text-align: center; margin-top: 15px;"><a href="#" onclick="showGuestCatalogFromAuth()" style="color: #718096;">Kembali ke toko</a></p>
             </div>
         </div>
 
-        <!-- Main App Section -->
         <div id="main-app" class="hidden">
             <div class="header">
-                <h1><i class="fas fa-shopping-cart"></i> Toko Elektronik Online</h1>
-                <div class="user-info">
-                    <span><i class="fas fa-user-circle"></i> Selamat datang, <strong id="current-user"></strong> (<span id="current-role"></span>)</span>
-                    <button class="btn btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
-                </div>
+                <h1><i class="fas fa-shopping-cart"></i> Toko Environment</h1>
+                <div id="user-info-container" class="user-info"></div>
+            </div>
+            <div class="nav-menu" id="nav-menu"></div>
+            
+            <div id="promotion-section" class="promotion-banner">
+                <img src="https://i.pinimg.com/736x/fc/9d/fd/fc9dfd2abb47d134bc10377476299313.jpg" alt="Promo Spesial 10.10" style="width: 100%; height: 400px;">
+                <div class="caption">🎉 Diskon Spesial 10.10! 🎉</div>
             </div>
 
-            <div class="nav-menu" id="nav-menu">
-                <!-- Navigation will be populated by JavaScript -->
-            </div>
+            <div class="content" id="content"></div>
+        </div>
+    </div>
 
-            <div class="content" id="content">
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    Memuat halaman...
-                </div>
+    <div id="myModal" class="modal-overlay">
+        <div class="modal-content">
+            <div id="modal-icon" class="modal-icon"></div>
+            <h3 id="modal-title"></h3>
+            <p id="modal-message"></p>
+            <div id="modal-buttons">
+                <button class="btn" onclick="hideModal()">OK</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Simulated Database
+        // === DATABASE SIMULATION ===
         let users = [
             { id: 1, username: 'admin', password: 'admin123', role: 'admin', name: 'Shani', email: 'admin@example.com' },
             { id: 2, username: 'user', password: 'user123', role: 'user', name: 'Bevi', email: 'user@example.com' }
         ];
-
         let products = [
-            { id: 1, name: 'Laptop Gaming', price: 15000000, stock: 10, description: 'Laptop gaming berkualitas tinggi dengan prosesor Intel i7, RAM 16GB, dan GPU NVIDIA RTX 3060. Cocok untuk gaming dan pekerjaan berat.', image: 'https://i.pinimg.com/736x/19/e2/5e/19e25e3dc9ef7af55f9175bc75c6507b.jpg' },
-            { id: 2, name: 'Mouse Wireless', price: 250000, stock: 25, description: 'Mouse wireless ergonomis dengan sensor presisi tinggi, baterai tahan lama, dan desain nyaman untuk penggunaan jangka panjang.', image: 'https://i.pinimg.com/736x/19/e2/5e/19e25e3dc9ef7af55f9175bc75c6507b.jpg' },
-            { id: 3, name: 'Keyboard Mechanical', price: 800000, stock: 15, description: 'Keyboard mechanical RGB dengan switch Cherry MX Brown, anti-ghosting, dan berbagai efek pencahayaan yang dapat disesuaikan.', image: 'https://i.pinimg.com/736x/19/e2/5e/19e25e3dc9ef7af55f9175bc75c6507b.jpg' },
-            { id: 4, name: 'Monitor 24 inch', price: 2500000, stock: 8, description: 'Monitor LED 24 inch Full HD dengan refresh rate 144Hz, waktu respons 1ms, dan teknologi AMD FreeSync untuk pengalaman gaming yang mulus.', image: 'https://i.pinimg.com/736x/19/e2/5e/19e25e3dc9ef7af55f9175bc75c6507b.jpg' },
-            { id: 5, name: 'Headset Gaming', price: 500000, stock: 20, description: 'Headset gaming dengan kualitas suara surround 7.1, mikrofon dengan noise-cancelling, dan bantalan telinga yang nyaman untuk sesi gaming panjang.', image: 'https://i.pinimg.com/736x/19/e2/5e/19e25e3dc9ef7af55f9175bc75c6507b.jpg' }
-        ];  
+            { id: 1, name: 'Laptop Gaming', price: 15000000, stock: 10, description: 'Laptop gaming berkualitas tinggi dengan prosesor Intel i7, RAM 16GB, dan GPU NVIDIA RTX 3060.', image: 'https://i.pinimg.com/736x/19/e2/5e/19e25e3dc9ef7af55f9175bc75c6507b.jpg' },
+            { id: 2, name: 'Mouse Wireless', price: 250000, stock: 25, description: 'Mouse wireless ergonomis dengan sensor presisi tinggi dan baterai tahan lama.', image: 'https://i.pinimg.com/736x/19/e2/5e/19e25e3dc9ef7af55f9175bc75c6507b.jpg' },
+            { id: 3, name: 'Keyboard Mechanical', price: 800000, stock: 15, description: 'Keyboard mechanical RGB dengan switch Cherry MX Brown dan anti-ghosting.', image: 'https://i.pinimg.com/736x/19/e2/5e/19e25e3dc9ef7af55f9175bc75c6507b.jpg' },
+            { id: 4, name: 'Monitor 24 inch', price: 2500000, stock: 8, description: 'Monitor LED 24 inch Full HD dengan refresh rate 144Hz dan waktu respons 1ms.', image: 'https://i.pinimg.com/736x/19/e2/5e/19e25e3dc9ef7af55f9175bc75c6507b.jpg' },
+            { id: 5, name: 'Headset Gaming', price: 500000, stock: 20, description: 'Headset gaming dengan kualitas suara surround 7.1 dan mikrofon noise-cancelling.', image: 'https://i.pinimg.com/736x/19/e2/5e/19e25e3dc9ef7af55f9175bc75c6507b.jpg' }
+        ];
+        
+        // Helper to get a new unique ID for products
+        // Ensure this function is always available on the products array
+        products.newId = () => {
+            return products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+        };
 
-        let orders = [];
         let cart = [];
-        let currentUser = null;
         let orderHistory = [];
-        let currentPage = 'showHomepage'; // Default page
+        let currentUser = null;
+        let currentPage = 'showLandingPage'; // Initial page is now landing page
 
-        // Load state from localStorage
+        // === STATE MANAGEMENT ===
+        function saveAppState() {
+            const state = { currentUser, cart, orderHistory, products, currentPage };
+            localStorage.setItem('ecommerceAppState', JSON.stringify(state));
+        }
         function loadAppState() {
             const savedState = localStorage.getItem('ecommerceAppState');
             if (savedState) {
@@ -606,87 +972,86 @@
                 currentUser = state.currentUser;
                 cart = state.cart || [];
                 orderHistory = state.orderHistory || [];
-                products = state.products || products;
-                currentPage = state.currentPage || 'showHomepage';
-                
-                if (currentUser) {
-                    document.getElementById('current-user').textContent = currentUser.name;
-                    document.getElementById('current-role').textContent = currentUser.role.toUpperCase();
-                    document.getElementById('login-section').classList.add('hidden');
-                    document.getElementById('register-section').classList.add('hidden');
-                    document.getElementById('main-app').classList.remove('hidden');
-                    setupNavigation();
-                    
-                    // Load the last active page
-                    window[currentPage]();
+                // Reassign products to ensure it retains the newId function after loading from storage
+                products = state.products || products; 
+                // Ensure newId function is present even if it somehow got lost during JSON.parse
+                if (typeof products.newId !== 'function') {
+                    products.newId = () => {
+                        return products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+                    };
+                }
+                currentPage = state.currentPage || 'showLandingPage'; // Default to landing page if not set
+                 // Redirect admin from homepage/landing to dashboard on load
+                if (currentUser?.role === 'admin' && (currentPage === 'showHomepage' || currentPage === 'showLandingPage')) {
+                    currentPage = 'showAdminDashboard';
                 }
             }
         }
 
-        // Save state to localStorage
-        function saveAppState() {
-            const state = {
-                currentUser,
-                cart,
-                orderHistory,
-                products,
-                currentPage
-            };
-            localStorage.setItem('ecommerceAppState', JSON.stringify(state));
+        // === UI & AUTHENTICATION FLOW ===
+        function updateUI() {
+            updateHeader();
+            setupNavigation();
         }
 
-        // Authentication Functions
-        function showLogin() {
-            document.getElementById('login-section').classList.remove('hidden');
-            document.getElementById('register-section').classList.add('hidden');
+        // NEW: Function to display the landing page
+        function showLandingPage() {
             document.getElementById('main-app').classList.add('hidden');
-            currentPage = 'showLogin';
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('landing-page-section').classList.remove('hidden');
+            togglePromotionBanner(false); // Hide promotion banner on landing page
+            currentPage = 'showLandingPage';
             saveAppState();
+        }
+
+        function showLogin(message = null, type = 'error') {
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('landing-page-section').classList.add('hidden'); // Hide landing page
+            document.getElementById('auth-section').classList.remove('hidden');
+            document.getElementById('login-form-container').classList.remove('hidden');
+            document.getElementById('register-form-container').classList.add('hidden');
+            if (message) showAlert('login-alert-box', message, type, 5000);
         }
 
         function showRegister() {
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('register-section').classList.remove('hidden');
-            document.getElementById('main-app').classList.add('hidden');
-            currentPage = 'showRegister';
-            saveAppState();
+            document.getElementById('login-form-container').classList.add('hidden');
+            document.getElementById('register-form-container').classList.remove('hidden');
+        }
+
+        function hideAuthSection() {
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+        }
+
+        // New function to go back to catalog from auth section for guests
+        function showGuestCatalogFromAuth() {
+            hideAuthSection();
+            showCatalog();
         }
 
         function login(username, password) {
             const user = users.find(u => u.username === username && u.password === password);
             if (user) {
                 currentUser = user;
-                document.getElementById('current-user').textContent = user.name;
-                document.getElementById('current-role').textContent = user.role.toUpperCase();
-                
-                document.getElementById('login-section').classList.add('hidden');
-                document.getElementById('register-section').classList.add('hidden');
-                document.getElementById('main-app').classList.remove('hidden');
-                
-                setupNavigation();
-                showAlert('login-alert', 'Login berhasil!', 'success');
-                saveAppState();
-                showHomepage();
+                hideAuthSection();
+                updateUI();
+                showModal('Login Berhasil!', `Selamat datang kembali, ${currentUser.name}!`, 'success');
+                if (user.role === 'admin') {
+                    currentPage = 'showAdminDashboard'; // Set current page for admin
+                    showAdminDashboard();
+                } else {
+                    currentPage = 'showHomepage'; // Set current page for user
+                    showHomepage();
+                }
+                saveAppState(); // Save state after determining the landing page
                 return true;
             }
             return false;
         }
 
         function register(userData) {
-            const existingUser = users.find(u => u.username === userData.username);
-            if (existingUser) {
-                return false;
-            }
-            
-            const newUser = {
-                id: users.length + 1,
-                username: userData.username,
-                password: userData.password,
-                role: 'user',
-                name: userData.name,
-                email: userData.email
-            };
-            
+            if (users.find(u => u.username === userData.username)) return false;
+            const newUser = { id: users.length + 1, role: 'user', ...userData };
             users.push(newUser);
             saveAppState();
             return true;
@@ -695,188 +1060,311 @@
         function logout() {
             currentUser = null;
             cart = [];
-            localStorage.removeItem('ecommerceAppState');
-            showLogin();
+            localStorage.removeItem('ecommerceAppState'); // Clear saved state on logout
+            sessionStorage.removeItem('hasShownLoadingPage'); // Clear loading page flag
+            updateUI(); // This will re-render navigation for guest
+            showModal('Logout Berhasil!', 'Anda telah berhasil logout.', 'info');
+            showLandingPage(); // Redirect to landing page after logout
+        }
+
+        function updateHeader() {
+            const userInfoContainer = document.getElementById('user-info-container');
+            if (currentUser) {
+                userInfoContainer.innerHTML = `
+                    <span><i class="fas fa-user-circle"></i> Selamat datang, <strong>${currentUser.name}</strong> (${currentUser.role.toUpperCase()})</span>
+                    <button class="btn btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>`;
+            } else {
+                userInfoContainer.innerHTML = `
+                    <span><i class="fas fa-user-circle"></i> Selamat datang, Tamu!</span>
+                    <button class="btn" onclick="showLogin('Silakan login untuk melanjutkan.')"><i class="fas fa-sign-in-alt"></i> Login / Daftar</button>`;
+            }
         }
 
         function setupNavigation() {
             const navMenu = document.getElementById('nav-menu');
             navMenu.innerHTML = '';
+            
+            let menusToShow = [];
+            
+            if (currentUser?.role === 'admin') {
+                menusToShow = [
+                    { name: '<i class="fas fa-chart-line"></i> Dashboard', func: 'showAdminDashboard' },
+                    { name: '<i class="fas fa-list"></i> Katalog', func: 'showCatalog' },
+                    { name: '<i class="fas fa-boxes"></i> Kelola Produk', func: 'showProductManagement' },
+                    { name: '<i class="fas fa-clipboard-list"></i> Kelola Pesanan', func: 'showOrderManagement' }
+                ];
+            } else if (currentUser?.role === 'user') {
+                menusToShow = [
+                    { name: '<i class="fas fa-home"></i> Homepage', func: 'showHomepage' },
+                    { name: '<i class="fas fa-list"></i> Katalog', func: 'showCatalog' },
+                    { name: '<i class="fas fa-shopping-cart"></i> Keranjang', func: 'showCart' },
+                    { name: '<i class="fas fa-history"></i> History Pesanan', func: 'showOrderHistory' }
+                ];
+            } else { // Guest
+                menusToShow = [
+                    { name: '<i class="fas fa-home"></i> Homepage', func: 'showHomepage' }, // Homepage for guest will now go to showCatalog
+                    { name: '<i class="fas fa-list"></i> Katalog', func: 'showCatalog' },
+                    { name: '<i class="fas fa-sign-in-alt"></i> Login / Daftar', func: 'showLogin' } // Added login/register option
+                ];
+            }
 
-            const commonMenus = [
-                { name: '<i class="fas fa-home"></i> Homepage', func: 'showHomepage' },
-                { name: '<i class="fas fa-list"></i> Katalog', func: 'showCatalog' },
-                { name: '<i class="fas fa-info-circle"></i> Detail Produk', func: 'showProductDetail' }
-            ];
-
-            const userMenus = [
-                { name: '<i class="fas fa-shopping-cart"></i> Keranjang', func: 'showCart' },
-                { name: '<i class="fas fa-cash-register"></i> Checkout', func: 'showCheckout' },
-                { name: '<i class="fas fa-history"></i> History Pesanan', func: 'showOrderHistory' }
-            ];
-
-            const adminMenus = [
-                { name: '<i class="fas fa-boxes"></i> Kelola Produk', func: 'showProductManagement' },
-                { name: '<i class="fas fa-clipboard-list"></i> Kelola Pesanan', func: 'showOrderManagement' }
-            ];
-
-            // Add common menus
-            commonMenus.forEach(menu => {
+            menusToShow.forEach(menu => {
                 const button = document.createElement('button');
                 button.className = 'nav-item';
                 button.innerHTML = menu.name;
-                button.onclick = () => {
-                    currentPage = menu.func;
-                    window[menu.func]();
-                };
+                button.onclick = () => window[menu.func]();
                 navMenu.appendChild(button);
             });
+        }
 
-            // Add role-specific menus
-            if (currentUser.role === 'user') {
-                userMenus.forEach(menu => {
-                    const button = document.createElement('button');
-                    button.className = 'nav-item';
-                    button.innerHTML = menu.name;
-                    button.onclick = () => {
-                        currentPage = menu.func;
-                        window[menu.func]();
-                    };
-                    navMenu.appendChild(button);
-                });
-            } else if (currentUser.role === 'admin') {
-                adminMenus.forEach(menu => {
-                    const button = document.createElement('button');
-                    button.className = 'nav-item';
-                    button.innerHTML = menu.name;
-                    button.onclick = () => {
-                        currentPage = menu.func;
-                        window[menu.func]();
-                    };
-                    navMenu.appendChild(button);
-                });
+        // NEW: Function to toggle the visibility of the promotion banner
+        function togglePromotionBanner(show) {
+            const banner = document.getElementById('promotion-section');
+            if (banner) {
+                if (show) {
+                    banner.classList.remove('hidden');
+                } else {
+                    banner.classList.add('hidden');
+                }
             }
         }
 
-        // Page Functions
+
+        // === PAGE RENDERING ===
+        function renderPage(title, contentHTML) {
+            const content = document.getElementById('content');
+            content.innerHTML = `<h2 class="section-title">${title}</h2>` + contentHTML;
+        }
+
         function showHomepage() {
             currentPage = 'showHomepage';
             saveAppState();
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <h2 class="section-title"><i class="fas fa-home"></i> Halaman Utama</h2>
+            togglePromotionBanner(true); // Show the banner on the homepage
+            
+            // Ensure main-app is visible and landing page/auth are hidden
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('landing-page-section').classList.add('hidden');
+
+            // For guests, homepage is just the catalog view. For logged-in users, it's the actual homepage.
+            if (!currentUser) {
+                showCatalog(); // Guests homepage directs to catalog
+                return;
+            }
+
+            const popularProductsHTML = products.slice(0, 3).map(renderProductCard).join('');
+            
+            // Konten promosi
+            const promotionContent = `
+                <div class="info-box"><p><strong>Selamat datang di Toko Serba Ada!</strong> Temukan berbagai produk elektronik berkualitas dengan harga terbaik.</p></div>
+            `;
+
+            renderPage('<i class="fas fa-home"></i> Halaman Utama', `
+                ${promotionContent}
+                <h3 style="margin: 25px 0 20px; color: var(--header-text-color);"><i class="fas fa-star"></i> Produk Terpopuler</h3>
+                <div class="product-grid">${popularProductsHTML}</div>
+                <div class="action-container"><button class="btn" onclick="showCatalog()"><i class="fas fa-list"></i> Lihat Semua Produk</button></div>`);
+        }
+        
+        
+        function showAdminDashboard() {
+            currentPage = 'showAdminDashboard';
+            saveAppState();
+            togglePromotionBanner(false); 
+            // Ensure main-app is visible and landing page/auth are hidden
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('landing-page-section').classList.add('hidden');
+
+            const contentHTML = `
                 <div class="info-box">
-                    <p><strong>Selamat datang di Toko Elektronik Online!</strong> Temukan berbagai produk elektronik berkualitas dengan harga terbaik. Kami menyediakan laptop, periferal, dan aksesori komputer terbaru untuk kebutuhan Anda.</p>
+                    <p><strong>Selamat datang, Admin!</strong> Dashboard ini menampilkan ringkasan data penjualan.</p>
                 </div>
-                <h3 style="margin: 25px 0 20px; color: #4a5568;"><i class="fas fa-star"></i> Produk Terpopuler</h3>
-                <div class="product-grid">
-                    ${products.slice(0, 3).map(product => `
-                        <div class="product-card">
-                            <img src="${product.image}" alt="${product.name}" class="product-image">
-                            <div class="product-content">
-                                <h3 class="product-title">${product.name}</h3>
-                                <p class="product-description">${product.description}</p>
-                                <p class="product-price">Rp ${product.price.toLocaleString('id-ID')}</p>
-                                <p class="product-stock">Stok: ${product.stock} unit</p>
-                                <div class="btn-group">
-                                    <button class="btn" onclick="addToCart(${product.id})">
-                                        <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
-                                    </button>
-                                    <button class="btn btn-outline" onclick="showProductDetailById(${product.id})">
-                                        <i class="fas fa-info-circle"></i> Detail
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-                <div class="action-container">
-                    <button class="btn" onclick="showCatalog()">
-                        <i class="fas fa-list"></i> Lihat Semua Produk
-                    </button>
+                <div class="detail-card" style="padding: 30px;">
+                    <h3 style="margin-bottom: 25px; color: var(--header-text-color);"><i class="fas fa-chart-bar"></i> Grafik Total Penjualan per Produk</h3>
+                    <canvas id="salesChart" style="max-height: 400px;"></canvas>
                 </div>
             `;
+            renderPage('<i class="fas fa-chart-line"></i> Dashboard Admin', contentHTML);
+            renderSalesChart(); // Call function to render the chart
         }
+
+        // NEW: Function to render the sales chart
+        function renderSalesChart() {
+            const ctx = document.getElementById('salesChart')?.getContext('2d');
+            if (!ctx) {
+                console.warn("Canvas element for salesChart not found or context unavailable.");
+                return;
+            }
+            
+            // Aggregate sales data from orderHistory
+            const salesData = {};
+            orderHistory.forEach(order => {
+                order.items.forEach(item => {
+                    if (salesData[item.name]) {
+                        salesData[item.name] += item.price * item.quantity;
+                    } else {
+                        salesData[item.name] = item.price * item.quantity;
+                    }
+                });
+            });
+
+            const productNames = Object.keys(salesData);
+            const totalSales = Object.values(salesData);
+            
+            if (window.mySalesChart) {
+                window.mySalesChart.destroy();
+            }
+
+            window.mySalesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: productNames,
+                    datasets: [{
+                        label: 'Total Penjualan (Rp)',
+                        data: totalSales,
+                        backgroundColor: 'rgba(102, 126, 234, 0.6)', /* Bisa menggunakan var(--primary-color) */
+                        borderColor: 'rgba(102, 126, 234, 1)', /* Bisa menggunakan var(--primary-color) */
+                        borderWidth: 1,
+                        borderRadius: 5,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'Rp ' + value.toLocaleString('id-ID');
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                             callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += 'Rp ' + context.parsed.y.toLocaleString('id-ID');
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
 
         function showCatalog() {
             currentPage = 'showCatalog';
             saveAppState();
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <h2 class="section-title"><i class="fas fa-list"></i> Katalog Produk</h2>
-                <div class="info-box">
-                    <p><strong>Telusuri katalog produk kami</strong>. Kami menyediakan berbagai macam produk elektronik berkualitas tinggi dengan harga kompetitif. Setiap produk telah melalui proses seleksi ketat untuk memastikan kualitas terbaik.</p>
-                </div>
-                <div class="product-grid">
-                    ${products.map(product => `
-                        <div class="product-card">
-                            <img src="${product.image}" alt="${product.name}" class="product-image">
-                            <div class="product-content">
-                                <h3 class="product-title">${product.name}</h3>
-                                <p class="product-description">${product.description}</p>
-                                <p class="product-price">Rp ${product.price.toLocaleString('id-ID')}</p>
-                                <p class="product-stock">Stok: ${product.stock} unit</p>
-                                <div class="btn-group">
-                                    <button class="btn" onclick="addToCart(${product.id})">
-                                        <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
-                                    </button>
-                                    <button class="btn btn-outline" onclick="showProductDetailById(${product.id})">
-                                        <i class="fas fa-info-circle"></i> Detail
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
+            togglePromotionBanner(false); // Hide the banner for catalog page
+            // Ensure main-app is visible and landing page/auth are hidden
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('landing-page-section').classList.add('hidden');
+
+            const allProductsHTML = products.map(renderProductCard).join('');
+            renderPage('<i class="fas fa-list"></i> Katalog Produk', `<div class="product-grid">${allProductsHTML}</div>`);
         }
 
-        function showProductDetail() {
-            currentPage = 'showProductDetail';
-            saveAppState();
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <h2 class="section-title"><i class="fas fa-info-circle"></i> Detail Produk</h2>
-                <div class="empty-state">
-                    <i class="fas fa-search"></i>
-                    <h3>Pilih produk untuk melihat detail</h3>
-                    <p>Silakan pilih produk dari katalog untuk melihat detail lengkap spesifikasi dan deskripsi produk.</p>
-                    <button class="btn" onclick="showCatalog()">
-                        <i class="fas fa-list"></i> Lihat Katalog Produk
+        function renderProductCard(product) {
+            let buyButtonHTML = '';
+            if (currentUser && currentUser.role === 'user') {
+                // If logged in as a user, show actual add to cart button
+                buyButtonHTML = `
+                    <button class="btn" onclick="addToCart(${product.id})" ${product.stock === 0 ? 'disabled' : ''}>
+                        <i class="fas fa-cart-plus"></i> Tambah
                     </button>
-                </div>
-            `;
-        }
+                `;
+            } else if (!currentUser) {
+                // If no user is logged in (guest), show a button that prompts login
+                buyButtonHTML = `
+                    <button class="btn" onclick="showLogin('Anda harus login untuk masukkan produk ke keranjang.')" ${product.stock === 0 ? 'disabled' : ''}>
+                        <i class="fas fa-cart-plus"></i> Masukkan Keranjang
+                    </button>
+                `;
+            }
+            // Admin role should not see 'Tambah' or 'Beli/Tambah' button, only 'Detail' is sufficient for management.
 
-        function showProductDetailById(productId) {
-            currentPage = 'showProductDetailById';
-            saveAppState();
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <h2 class="section-title"><i class="fas fa-info-circle"></i> Detail Produk</h2>
-                <div class="detail-card">
-                    <div style="display: flex; gap: 30px; flex-wrap: wrap;">
-                        <div style="flex: 1; min-width: 300px;">
-                            <img src="${product.image}" alt="${product.name}" style="width:100%; border-radius: 10px;">
+            return `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-content">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-description">${product.description}</p>
+                        <p class="product-price">Rp ${product.price.toLocaleString('id-ID')}</p>
+                        <p class="product-stock">Stok: ${product.stock > 0 ? product.stock + ' unit' : 'Habis'}</p>
+                        <div class="btn-group">
+                            ${buyButtonHTML}
+                            <button class="btn btn-outline" onclick="showProductDetailById(${product.id})"><i class="fas fa-info-circle"></i> Detail</button>
                         </div>
-                        <div style="flex: 2; min-width: 300px;">
-                            <h3 style="font-size: 1.8rem; margin-bottom: 15px; color: #2d3748;">${product.name}</h3>
-                            <p class="product-price" style="font-size: 1.8rem; margin: 20px 0;">Rp ${product.price.toLocaleString('id-ID')}</p>
-                            <p style="margin-bottom: 25px; color: #4a5568; line-height: 1.7;">${product.description}</p>
-                            
-                            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 25px;">
-                                <h4 style="margin-bottom: 15px; color: #4a5568;"><i class="fas fa-box-open"></i> Informasi Stok</h4>
-                                <p><strong>Stok Tersedia:</strong> ${product.stock} unit</p>
-                                <p><strong>Status:</strong> ${product.stock > 0 ? '<span style="color: #38a169;">Tersedia</span>' : '<span style="color: #e53e3e;">Habis</span>'}</p>
+                    </div>
+                </div>`;
+        }
+        
+       function showProductDetailById(productId) {
+            currentPage = 'showProductDetailById'; // Simpan halaman saat ini
+            saveAppState(); // Simpan state aplikasi
+            togglePromotionBanner(false); // Hide the banner for product detail page
+
+            // Ensure main-app is visible and landing page/auth are hidden
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('landing-page-section').classList.add('hidden');
+
+            const product = products.find(p => p.id === productId);
+
+            if (!product) {
+                // Jika produk tidak ditemukan, kembali ke katalog
+                showModal('Produk Tidak Ditemukan', 'Produk yang Anda cari tidak ada.', 'error');
+                showCatalog();
+                return;
+            }
+
+            let addToCartButton = '';
+            if (currentUser && currentUser.role === 'user') {
+                // If logged in as a user, show actual add to cart button
+                addToCartButton = `
+                    <button class="btn" onclick="addToCart(${product.id})" ${product.stock === 0 ? 'disabled' : ''}>
+                        <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
+                    </button>
+                `;
+            } else if (!currentUser) {
+                // If no user is logged in (guest), show a button that prompts login
+                addToCartButton = `
+                    <button class="btn" onclick="showLogin('Anda harus login untuk menambahkan produk ke keranjang.')" ${product.stock === 0 ? 'disabled' : ''}>
+                        <i class="fas fa-cart-plus"></i> Beli / Tambah
+                    </button>
+                `;
+            }
+
+
+            const detailHTML = `
+                <div class="detail-card">
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px; align-items: flex-start;">
+                        <img src="${product.image}" alt="${product.name}" style="width: 100%; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <div>
+                            <h3 class="product-title" style="font-size: 2rem; margin-top: 0;">${product.name}</h3>
+                            <p class="product-price" style="font-size: 1.8rem;">Rp ${product.price.toLocaleString('id-ID')}</p>
+                            <p class="product-stock" style="font-size: 1.1rem;">Stok tersedia: <strong>${product.stock > 0 ? product.stock + ' unit' : 'Habis'}</strong></p>
+                            <div class="info-box" style="margin-top: 20px;">
+                                <h4 style="margin-bottom: 10px;">Deskripsi Produk</h4>
+                                <p class="product-description" style="font-size: 1.1rem;">${product.description}</p>
                             </div>
-                            
-                            <div class="btn-group">
-                                <button class="btn" onclick="addToCart(${product.id})">
-                                    <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
-                                </button>
+                            <div class="action-container" style="justify-content: flex-start; margin-top: 30px;">
+                                ${addToCartButton}
                                 <button class="btn btn-outline" onclick="showCatalog()">
                                     <i class="fas fa-arrow-left"></i> Kembali ke Katalog
                                 </button>
@@ -885,679 +1373,529 @@
                     </div>
                 </div>
             `;
-        }
 
+            renderPage(`<i class="fas fa-info-circle"></i> Detail Produk`, detailHTML);
+        }
+        
         function showCart() {
             currentPage = 'showCart';
+            if (!currentUser) { showLogin('Anda harus login untuk melihat keranjang.'); return; }
             saveAppState();
-            const content = document.getElementById('content');
+            togglePromotionBanner(false); // Hide the banner for cart page
+            // Ensure main-app is visible and landing page/auth are hidden
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('landing-page-section').classList.add('hidden');
+
             if (cart.length === 0) {
-                content.innerHTML = `
-                    <h2 class="section-title"><i class="fas fa-shopping-cart"></i> Keranjang Belanja</h2>
-                    <div class="empty-state">
-                        <i class="fas fa-shopping-cart"></i>
-                        <h3>Keranjang Belanja Kosong</h3>
-                        <p>Anda belum menambahkan produk apapun ke dalam keranjang belanja. Mulai belanja sekarang!</p>
-                        <button class="btn" onclick="showCatalog()">
-                            <i class="fas fa-shopping-bag"></i> Mulai Belanja
-                        </button>
-                    </div>
-                `;
+                renderPage('<i class="fas fa-shopping-cart"></i> Keranjang Belanja', `<div class="empty-state"><i class="fas fa-shopping-cart"></i><h3>Keranjang Belanja Kosong</h3><p>Mulai belanja dan tambahkan produk ke keranjang!</p><button class="btn" onclick="showCatalog()"><i class="fas fa-shopping-bag"></i> Mulai Belanja</button></div>`);
                 return;
             }
-
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            
-            content.innerHTML = `
-                <h2 class="section-title"><i class="fas fa-shopping-cart"></i> Keranjang Belanja</h2>
-                <div class="info-box">
-                    <p><strong>Tinjau produk dalam keranjang Anda</strong>. Anda dapat mengubah jumlah produk atau menghapus produk sebelum melanjutkan ke proses checkout.</p>
-                </div>
-                <div>
-                    ${cart.map(item => `
-                        <div class="cart-item">
-                            <div style="flex: 1;">
-                                <h4 style="margin-bottom: 8px;">${item.name}</h4>
-                                <p>Rp ${item.price.toLocaleString('id-ID')} / unit</p>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 20px;">
-                                <div class="quantity-controls">
-                                    <div class="quantity-btn" onclick="updateCartQuantity(${item.id}, ${item.quantity - 1})">-</div>
-                                    <span style="min-width: 40px; text-align: center; font-weight: bold;">${item.quantity}</span>
-                                    <div class="quantity-btn" onclick="updateCartQuantity(${item.id}, ${item.quantity + 1})">+</div>
-                                </div>
-                                <p style="font-weight: bold; min-width: 150px; text-align: right;">
-                                    Rp ${(item.price * item.quantity).toLocaleString('id-ID')}
-                                </p>
-                                <button class="btn btn-danger" onclick="removeFromCart(${item.id})">
-                                    <i class="fas fa-trash"></i> Hapus
-                                </button>
-                            </div>
+            const cartItemsHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div style="flex: 1;"><h4 style="margin-bottom: 8px;">${item.name}</h4><p>Rp ${item.price.toLocaleString('id-ID')}</p></div>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div class="quantity-controls">
+                            <div class="quantity-btn" onclick="updateCartQuantity(${item.id}, ${item.quantity - 1})">-</div>
+                            <span style="min-width: 40px; text-align: center; font-weight: bold;">${item.quantity}</span>
+                            <div class="quantity-btn" onclick="updateCartQuantity(${item.id}, ${item.quantity + 1})">+</div>
                         </div>
-                    `).join('')}
-                </div>
-                <div class="cart-total">
-                    Total Pembayaran: Rp ${total.toLocaleString('id-ID')}
-                </div>
-                <div class="action-container">
-                    <button class="btn" onclick="showCheckout()">
-                        <i class="fas fa-cash-register"></i> Lanjutkan ke Checkout
-                    </button>
-                    <button class="btn btn-outline" onclick="clearCart()">
-                        <i class="fas fa-trash-alt"></i> Kosongkan Keranjang
-                    </button>
-                    <button class="btn btn-outline" onclick="showCatalog()">
-                        <i class="fas fa-arrow-left"></i> Lanjutkan Belanja
-                    </button>
-                </div>
-            `;
+                        <p style="font-weight: bold; min-width: 150px; text-align: right;">Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</p>
+                        <button class="btn btn-danger" onclick="confirmRemoveFromCart(${item.id})"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>`).join('');
+            renderPage('<i class="fas fa-shopping-cart"></i> Keranjang Belanja', `<div>${cartItemsHTML}</div><div class="cart-total">Total: Rp ${total.toLocaleString('id-ID')}</div><div class="action-container"><button class="btn" onclick="showCheckout()"><i class="fas fa-cash-register"></i> Lanjutkan ke Checkout</button></div>`);
         }
 
         function showCheckout() {
             currentPage = 'showCheckout';
-            saveAppState();
-            if (cart.length === 0) {
-                showAlert('content', 'Keranjang kosong! Tambahkan produk terlebih dahulu.', 'error');
+            if (!currentUser || currentUser.role !== 'user') {
+                showModal('Akses Ditolak', 'Anda harus login sebagai user untuk melanjutkan ke checkout.', 'error');
                 return;
             }
+            if (cart.length === 0) { showModal('Keranjang Kosong', 'Keranjang belanja Anda kosong. Silakan tambahkan produk terlebih dahulu.', 'info'); setTimeout(showCatalog, 1500); return; }
+            saveAppState();
+            togglePromotionBanner(false); // Hide the banner for checkout page
+            // Ensure main-app is visible and landing page/auth are hidden
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('landing-page-section').classList.add('hidden');
 
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const content = document.getElementById('content');
-            
-            content.innerHTML = `
-                <h2 class="section-title"><i class="fas fa-cash-register"></i> Proses Checkout</h2>
-                <div class="info-box">
-                    <p><strong>Lengkapi data pengiriman dan pembayaran</strong>. Pastikan informasi yang Anda masukkan akurat untuk memastikan pengiriman berjalan lancar.</p>
-                </div>
+            renderPage('<i class="fas fa-cash-register"></i> Proses Checkout', `
                 <div class="form-container">
-                    <div class="form-group">
-                        <label><i class="fas fa-map-marker-alt"></i> Alamat Pengiriman:</label>
-                        <textarea id="shipping-address" rows="4" placeholder="Masukkan alamat lengkap pengiriman..." required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-credit-card"></i> Metode Pembayaran:</label>
-                        <select id="payment-method">
-                            <option value="transfer">Transfer Bank</option>
-                            <option value="cod">Cash on Delivery (COD)</option>
-                            <option value="credit">Kartu Kredit</option>
-                            <option value="ewallet">E-Wallet (OVO, GoPay, Dana)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-sticky-note"></i> Catatan Pesanan (Opsional):</label>
-                        <textarea id="order-notes" rows="3" placeholder="Catatan tambahan untuk penjual..."></textarea>
-                    </div>
-                    
-                    <h3 style="margin: 30px 0 20px; color: #4a5568;"><i class="fas fa-receipt"></i> Ringkasan Pesanan</h3>
-                    <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.05);">
-                        ${cart.map(item => `
-                            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
-                                <div>
-                                    ${item.name} (${item.quantity}x)
-                                </div>
-                                <div>
-                                    Rp ${(item.price * item.quantity).toLocaleString('id-ID')}
-                                </div>
-                            </div>
-                        `).join('')}
-                        <div style="display: flex; justify-content: space-between; padding: 15px 0; font-weight: bold; font-size: 1.2rem;">
-                            <div>Total Pembayaran:</div>
-                            <div>Rp ${total.toLocaleString('id-ID')}</div>
-                        </div>
-                    </div>
-                    
-                    <div class="action-container">
-                        <button class="btn" onclick="processOrder()">
-                            <i class="fas fa-check-circle"></i> Konfirmasi Pesanan
-                        </button>
-                        <button class="btn btn-outline" onclick="showCart()">
-                            <i class="fas fa-arrow-left"></i> Kembali ke Keranjang
-                        </button>
-                    </div>
-                </div>
-            `;
+                    <div class="form-group"><label>Alamat Pengiriman:</label><textarea id="shipping-address" rows="4" required></textarea></div>
+                    <div class="form-group"><label>Metode Pembayaran:</label><select id="payment-method"><option value="transfer">Transfer Bank</option><option value="cod">COD</option></select></div>
+                    <h3 style="margin: 30px 0 15px; color: var(--header-text-color);">Ringkasan Pesanan</h3>
+                    <div class="detail-card">${cart.map(item => `<div style="display:flex;justify-content:space-between;padding:8px 0;"><span>${item.name} (x${item.quantity})</span><span>Rp ${(item.price*item.quantity).toLocaleString('id-ID')}</span></div>`).join('')}<hr style="margin:10px 0;"><div style="display:flex;justify-content:space-between;font-weight:bold;font-size:1.2rem;"><span>Total</span><span>Rp ${total.toLocaleString('id-ID')}</span></div></div>
+                    <div class="action-container"><button class="btn" onclick="processOrder()">Konfirmasi Pesanan</button></div>
+                </div>`);
         }
 
         function showOrderHistory() {
             currentPage = 'showOrderHistory';
+            if (!currentUser) { showLogin('Anda harus login untuk melihat riwayat pesanan.'); return; }
             saveAppState();
-            const userOrders = orderHistory.filter(order => order.userId === currentUser.id);
-            const content = document.getElementById('content');
-            
+            togglePromotionBanner(false); // Hide the banner for order history page
+            // Ensure main-app is visible and landing page/auth are hidden
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('landing-page-section').classList.add('hidden');
+
+            const userOrders = orderHistory.filter(o => o.userId === currentUser.id);
             if (userOrders.length === 0) {
-                content.innerHTML = `
-                    <h2 class="section-title"><i class="fas fa-history"></i> History Pesanan</h2>
-                    <div class="empty-state">
-                        <i class="fas fa-box-open"></i>
-                        <h3>Belum Ada Riwayat Pesanan</h3>
-                        <p>Anda belum melakukan pesanan apapun. Mulai belanja sekarang dan nikmati berbagai produk elektronik berkualitas.</p>
-                        <button class="btn" onclick="showCatalog()">
-                            <i class="fas fa-shopping-bag"></i> Mulai Belanja
-                        </button>
-                    </div>
-                `;
-                return;
+                renderPage('<i class="fas fa-history"></i> History Pesanan', `<div class="empty-state"><i class="fas fa-box-open"></i><h3>Belum Ada Riwayat Pesanan</h3></div>`); return;
             }
-
-            content.innerHTML = `
-                <h2 class="section-title"><i class="fas fa-history"></i> History Pesanan</h2>
-                <div class="info-box">
-                    <p><strong>Tinjau riwayat pesanan Anda</strong>. Berikut adalah daftar pesanan yang pernah Anda lakukan beserta status pengirimannya.</p>
-                </div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID Pesanan</th>
-                            <th>Tanggal</th>
-                            <th>Total</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${userOrders.map(order => `
-                            <tr>
-                                <td>#${order.id}</td>
-                                <td>${order.date}</td>
-                                <td>Rp ${order.total.toLocaleString('id-ID')}</td>
-                                <td>
-                                    <span style="padding: 5px 12px; border-radius: 20px; background: ${
-                                        order.status === 'pending' ? '#fef3c7' : 
-                                        order.status === 'processing' ? '#dbeafe' : 
-                                        order.status === 'shipped' ? '#fce7f3' : 
-                                        '#dcfce7'}; 
-                                        color: ${
-                                        order.status === 'pending' ? '#92400e' : 
-                                        order.status === 'processing' ? '#1e40af' : 
-                                        order.status === 'shipped' ? '#9d174d' : 
-                                        '#166534'};">
-                                    ${order.status}
-                                    </span>
-                                </td>
-                                <td>
-                                    <button class="btn" onclick="showOrderDetail(${order.id})">
-                                        <i class="fas fa-eye"></i> Detail
-                                    </button>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            `;
+            const historyHTML = `<table class="table"><thead><tr><th>ID</th><th>Tanggal</th><th>Total</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${userOrders.map(order => `<tr><td>#${order.id}</td><td>${order.date}</td><td>Rp ${order.total.toLocaleString('id-ID')}</td><td>${order.status}</td><td><button class="btn btn-outline" onclick="showOrderDetail(${order.id})"><i class="fas fa-eye"></i> Detail</button></td></tr>`).join('')}</tbody></table>`;
+            renderPage('<i class="fas fa-history"></i> History Pesanan', historyHTML);
         }
-
+        
         function showProductManagement() {
             currentPage = 'showProductManagement';
             saveAppState();
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <h2 class="section-title"><i class="fas fa-boxes"></i> Kelola Produk</h2>
-                <div class="info-box">
-                    <p><strong>Kelola katalog produk toko</strong>. Anda dapat menambah, mengedit, atau menghapus produk yang tersedia di toko online ini.</p>
+            togglePromotionBanner(false); // Hide the banner for product management page
+            // Ensure main-app is visible and landing page/auth are hidden
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('landing-page-section').classList.add('hidden');
+
+            renderProductManagement();
+        }
+
+        function renderProductManagement(editProductId = null) {
+            const productToEdit = editProductId ? products.find(p => p.id === editProductId) : null;
+            
+            const productForm = `
+                <div class="detail-card form-container" style="margin-bottom: 30px;">
+                    <h3 style="margin-bottom: 25px; color: var(--header-text-color);"><i class="fas fa-plus-circle"></i> ${editProductId ? 'Edit Produk' : 'Tambah Produk Baru'}</h3>
+                    <form id="product-form">
+                        <input type="hidden" id="product-id" value="${productToEdit ? productToEdit.id : ''}">
+                        <div class="form-group">
+                            <label for="product-name">Nama Produk:</label>
+                            <input type="text" id="product-name" value="${productToEdit ? productToEdit.name : ''}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-price">Harga:</label>
+                            <input type="number" id="product-price" value="${productToEdit ? productToEdit.price : ''}" required min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="product-stock">Stok:</label>
+                            <input type="number" id="product-stock" value="${productToEdit ? productToEdit.stock : ''}" required min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="product-description">Deskripsi:</label>
+                            <textarea id="product-description" rows="4" required>${productToEdit ? productToEdit.description : ''}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-image">URL Gambar:</label>
+                            <input type="text" id="product-image" value="${productToEdit ? productToEdit.image : ''}" placeholder="URL gambar produk">
+                        </div>
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> ${editProductId ? 'Simpan Perubahan' : 'Tambah Produk'}</button>
+                            ${editProductId ? `<button type="button" class="btn btn-outline" id="cancel-edit-btn" onclick="renderProductManagement()"><i class="fas fa-ban"></i> Batal Edit</button>` : ''}
+                        </div>
+                    </form>
                 </div>
-                <div class="action-container">
-                    <button class="btn" onclick="showAddProductForm()">
-                        <i class="fas fa-plus-circle"></i> Tambah Produk Baru
-                    </button>
-                </div>
+            `;
+
+            const productListHTML = `
+                <h3 style="margin-bottom: 25px; color: var(--header-text-color);"><i class="fas fa-cubes"></i> Daftar Produk</h3>
                 <table class="table">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Nama Produk</th>
+                            <th>Nama</th>
                             <th>Harga</th>
                             <th>Stok</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        ${products.map(product => `
+                        ${products.map(p => `
                             <tr>
-                                <td>${product.id}</td>
-                                <td>${product.name}</td>
-                                <td>Rp ${product.price.toLocaleString('id-ID')}</td>
-                                <td>${product.stock}</td>
+                                <td>${p.id}</td>
+                                <td>${p.name}</td>
+                                <td>Rp ${p.price.toLocaleString('id-ID')}</td>
+                                <td>${p.stock}</td>
                                 <td>
-                                    <button class="btn" onclick="editProduct(${product.id})">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </button>
-                                    <button class="btn btn-danger" onclick="deleteProduct(${product.id})">
-                                        <i class="fas fa-trash"></i> Hapus
-                                    </button>
+                                    <button class="btn btn-outline" onclick="populateProductForm(${p.id})"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="btn btn-danger" onclick="confirmDeleteProduct(${p.id})"><i class="fas fa-trash-alt"></i> Hapus</button>
                                 </td>
                             </tr>
                         `).join('')}
                     </tbody>
                 </table>
             `;
+            renderPage('<i class="fas fa-boxes"></i> Kelola Produk', productForm + productListHTML);
+
+            // Add event listener for the form submission
+            // This needs to be re-attached every time the form is rendered
+            const productFormElement = document.getElementById('product-form');
+            if (productFormElement) {
+                productFormElement.removeEventListener('submit', handleProductFormSubmit); // Remove old listener if exists
+                productFormElement.addEventListener('submit', handleProductFormSubmit); // Add new listener
+            }
         }
 
-        function showOrderManagement() {
-            currentPage = 'showOrderManagement';
-            saveAppState();
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <h2 class="section-title"><i class="fas fa-clipboard-list"></i> Kelola Pesanan</h2>
-                <div class="info-box">
-                    <p><strong>Kelola semua pesanan pelanggan</strong>. Anda dapat mengubah status pesanan sesuai dengan proses pengiriman yang sedang berjalan.</p>
-                </div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID Pesanan</th>
-                            <th>Customer</th>
-                            <th>Tanggal</th>
-                            <th>Total</th>
-                            <th>Status</th>
-                            <th>Ubah Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${orderHistory.map(order => {
-                            const customer = users.find(u => u.id === order.userId);
-                            return `
-                                <tr>
-                                    <td>#${order.id}</td>
-                                    <td>${customer ? customer.name : 'Unknown'}</td>
-                                    <td>${order.date}</td>
-                                    <td>Rp ${order.total.toLocaleString('id-ID')}</td>
-                                    <td>
-                                        <span style="padding: 5px 12px; border-radius: 20px; background: ${
-                                            order.status === 'pending' ? '#fef3c7' : 
-                                            order.status === 'processing' ? '#dbeafe' : 
-                                            order.status === 'shipped' ? '#fce7f3' : 
-                                            '#dcfce7'}; 
-                                            color: ${
-                                            order.status === 'pending' ? '#92400e' : 
-                                            order.status === 'processing' ? '#1e40af' : 
-                                            order.status === 'shipped' ? '#9d174d' : 
-                                            '#166534'};">
-                                            ${order.status}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <select onchange="updateOrderStatus(${order.id}, this.value)" style="padding: 8px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                                            <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
-                                            <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
-                                            <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Shipped</option>
-                                            <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            `;
-                        }).join('')}
-                    </tbody>
-                </table>
-            `;
-        }
+        // Dedicated submit handler function to avoid re-creating anonymous functions
+        function handleProductFormSubmit(e) {
+            e.preventDefault();
+            console.log("Form product disubmit."); // Debugging
+            const id = document.getElementById('product-id').value;
+            const name = document.getElementById('product-name').value;
+            const price = parseInt(document.getElementById('product-price').value);
+            const stock = parseInt(document.getElementById('product-stock').value);
+            const description = document.getElementById('product-description').value;
+            const image = document.getElementById('product-image').value;
 
-        // Utility Functions
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product || product.stock === 0) {
-                showAlert('content', 'Produk tidak tersedia!', 'error');
+            // Basic validation
+            if (!name || isNaN(price) || isNaN(stock) || !description) {
+                showModal('Input Tidak Valid', 'Mohon lengkapi semua bidang dengan benar (harga dan stok harus angka)!', 'error');
                 return;
             }
 
+            const productData = { name, price, stock, description, image };
+            console.log("Data produk:", productData); // Debugging
+
+            if (id) {
+                editProduct(parseInt(id), productData);
+            } else {
+                addProduct(productData);
+            }
+        }
+
+
+        function populateProductForm(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                document.getElementById('product-id').value = product.id;
+                document.getElementById('product-name').value = product.name;
+                document.getElementById('product-price').value = product.price;
+                document.getElementById('product-stock').value = product.stock;
+                document.getElementById('product-description').value = product.description;
+                document.getElementById('product-image').value = product.image;
+                // Change button text
+                document.querySelector('#product-form button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Simpan Perubahan';
+                document.querySelector('#product-form button[type="submit"]').classList.add('btn-success');
+                // Ensure cancel button is present and visible
+                const cancelButton = document.getElementById('cancel-edit-btn');
+                if (cancelButton) {
+                    cancelButton.classList.remove('hidden'); // Ensure it's visible
+                } else {
+                    // This block should ideally not be hit if the button is always rendered
+                    // but as a fallback, create it if it doesn't exist.
+                    // (The current HTML structure always renders it conditionally).
+                    renderProductManagement(productId); // Re-render to ensure cancel button appears
+                }
+            }
+        }
+
+        function addProduct(productData) {
+            const newProduct = {
+                id: products.newId(),
+                ...productData
+            };
+            products.push(newProduct);
+            saveAppState();
+            console.log("Produk baru ditambahkan:", newProduct); // Debugging
+            showModal('Produk Ditambahkan', 'Produk berhasil ditambahkan!', 'success');
+            renderProductManagement(); // Re-render the list and clear the form
+        }
+
+        function editProduct(productId, updatedData) {
+            const index = products.findIndex(p => p.id === productId);
+            if (index !== -1) {
+                products[index] = { ...products[index], ...updatedData };
+                saveAppState();
+                console.log(`Produk ID ${productId} diperbarui:`, products[index]); // Debugging
+                showModal('Produk Diperbarui', 'Produk berhasil diperbarui!', 'success');
+                renderProductManagement(); // Re-render the list and clear form
+            } else {
+                showModal('Gagal', 'Produk tidak ditemukan!', 'error');
+            }
+        }
+
+        function deleteProduct(productId) {
+            products = products.filter(p => p.id !== productId);
+            saveAppState();
+            console.log(`Produk ID ${productId} dihapus.`); // Debugging
+            showModal('Produk Dihapus', 'Produk berhasil dihapus!', 'success');
+            renderProductManagement(); // Re-render the list
+        }
+
+        function confirmDeleteProduct(productId) {
+            showModal('Konfirmasi Hapus', 'Apakah Anda yakin ingin menghapus produk ini?', 'warning', 
+                `<button class="btn btn-danger" onclick="deleteProduct(${productId}); hideModal();">Hapus</button>
+                 <button class="btn btn-outline" onclick="hideModal()">Batal</button>`
+            );
+        }
+
+        function showOrderManagement() {
+            currentPage = 'showOrderManagement'; saveAppState();
+            togglePromotionBanner(false); 
+            // Ensure main-app is visible and landing page/auth are hidden
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('landing-page-section').classList.add('hidden');
+
+            const contentHTML = `<table class="table"><thead><tr><th>ID Pesanan</th><th>Customer</th><th>Total</th><th>Status</th><th>Ubah Status</th></tr></thead><tbody>${orderHistory.map(order => { const customer = users.find(u => u.id === order.userId); return `<tr><td>#${order.id}</td><td>${customer?.name || 'N/A'}</td><td>Rp ${order.total.toLocaleString('id-ID')}</td><td>${order.status}</td><td><select onchange="updateOrderStatus(${order.id}, this.value)" style="padding: 8px;"><option value="pending" ${order.status==='pending'?'selected':''}>Pending</option><option value="processing" ${order.status==='processing'?'selected':''}>Processing</option><option value="shipped" ${order.status==='shipped'?'selected':''}>Shipped</option><option value="delivered" ${order.status==='delivered'?'selected':''}>Delivered</option></select></td></tr>`; }).join('')}</tbody></table>`;
+            renderPage('<i class="fas fa-clipboard-list"></i> Kelola Pesanan', contentHTML);
+        }
+
+        function showOrderDetail(orderId) {
+            currentPage = 'showOrderDetail'; saveAppState();
+            togglePromotionBanner(false); 
+            // Ensure main-app is visible and landing page/auth are hidden
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('landing-page-section').classList.add('hidden');
+
+            const order = orderHistory.find(o => o.id === orderId);
+            if (!order) { showOrderHistory(); return; }
+            const customer = users.find(u => u.id === order.userId);
+            const detailHTML = `
+            <div class="detail-card">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div><h4>Detail Pesanan</h4><p><strong>ID:</strong> #${order.id}</p><p><strong>Tanggal:</strong> ${order.date}</p><p><strong>Status:</strong> ${order.status}</p><p><strong>Total:</strong> Rp ${order.total.toLocaleString('id-ID')}</p></div>
+                    <div><h4>Alamat Pengiriman</h4><p><strong>Penerima:</strong> ${customer?.name || 'N/A'}</p><p><strong>Alamat:</strong> ${order.address}</p><p><strong>Pembayaran:</strong> ${order.paymentMethod}</p></div>
+                </div>
+                <h4>Item Pesanan</h4>
+                <table class="table"><thead><tr><th>Produk</th><th>Harga</th><th>Jumlah</th><th>Subtotal</th></tr></thead><tbody>
+                ${order.items.map(item => `<tr><td>${item.name}</td><td>Rp ${item.price.toLocaleString('id-ID')}</td><td>${item.quantity}</td><td>Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</td></tr>`).join('')}
+                </tbody></table>
+                <div class="action-container"><button class="btn" onclick="${currentUser.role === 'admin' ? 'showOrderManagement()' : 'showOrderHistory()'}"><i class="fas fa-arrow-left"></i> Kembali</button></div>
+            </div>`;
+            renderPage(`<i class="fas fa-file-invoice"></i> Detail Pesanan #${order.id}`, detailHTML);
+        }
+
+
+        
+        function addToCart(productId) {
+           
+            if (!currentUser || currentUser.role !== 'user') {
+                
+                showModal('Akses Ditolak', 'Anda harus login sebagai user untuk menambahkan produk.', 'error');
+                return;
+            }
+
+            const product = products.find(p => p.id === productId);
+            if (!product || product.stock === 0) { showModal('Produk Tidak Tersedia', 'Produk ini sedang kosong atau tidak ditemukan.', 'error'); return; }
+            
             const existingItem = cart.find(item => item.id === productId);
             if (existingItem) {
-                if (existingItem.quantity < product.stock) {
-                    existingItem.quantity += 1;
-                    showAlert('content', 'Produk ditambahkan ke keranjang!', 'success');
-                } else {
-                    showAlert('content', 'Stok tidak mencukupi!', 'error');
+                if (existingItem.quantity < product.stock) { 
+                    existingItem.quantity++; 
+                    showModal('Ditambahkan ke Keranjang!', `"${product.name}" berhasil ditambahkan ke keranjang.`, 'success'); 
                 }
+                else { showModal('Stok Tidak Cukup', `Maaf, stok ${product.name} tidak mencukupi.`, 'warning'); }
             } else {
-                cart.push({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    quantity: 1
-                });
-                showAlert('content', 'Produk ditambahkan ke keranjang!', 'success');
+                cart.push({ id: product.id, name: product.name, price: product.price, quantity: 1 });
+                showModal('Ditambahkan ke Keranjang!', `"${product.name}" berhasil ditambahkan ke keranjang.`, 'success');
             }
             saveAppState();
         }
 
         function updateCartQuantity(productId, newQuantity) {
-            if (newQuantity <= 0) {
-                removeFromCart(productId);
-                return;
+            if (newQuantity <= 0) { 
+                confirmRemoveFromCart(productId); 
+                return; 
             }
-
             const product = products.find(p => p.id === productId);
-            if (newQuantity > product.stock) {
-                showAlert('content', 'Stok tidak mencukupi!', 'error');
-                return;
-            }
-
             const cartItem = cart.find(item => item.id === productId);
-            if (cartItem) {
-                cartItem.quantity = newQuantity;
-                showCart();
-                saveAppState();
+            if (newQuantity > product.stock) { showModal('Stok Tidak Cukup', `Maaf, stok ${product.name} tidak mencukupi untuk jumlah tersebut.`, 'warning'); return; }
+            if (cartItem) { 
+                cartItem.quantity = newQuantity; 
+                showCart(); 
+                saveAppState(); 
+                showModal('Jumlah Diperbarui', `Jumlah "${product.name}" di keranjang diperbarui menjadi ${newQuantity}.`, 'info', 1500);
             }
         }
 
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
-            showCart();
-            saveAppState();
+        function removeFromCart(productId) { 
+            cart = cart.filter(item => item.id !== productId); 
+            showCart(); 
+            saveAppState(); 
+            showModal('Dihapus dari Keranjang', 'Produk berhasil dihapus dari keranjang.', 'info');
         }
 
-        function clearCart() {
-            cart = [];
-            showCart();
-            saveAppState();
+        function confirmRemoveFromCart(productId) {
+            const product = cart.find(item => item.id === productId);
+            if (product) {
+                showModal('Konfirmasi Hapus', `Apakah Anda yakin ingin menghapus "${product.name}" dari keranjang?`, 'warning',
+                    `<button class="btn btn-danger" onclick="removeFromCart(${productId}); hideModal();">Hapus</button>
+                     <button class="btn btn-outline" onclick="hideModal()">Batal</button>`
+                );
+            }
         }
-
+        
         function processOrder() {
             const address = document.getElementById('shipping-address').value;
-            const paymentMethod = document.getElementById('payment-method').value;
-            const notes = document.getElementById('order-notes').value;
-
-            if (!address.trim()) {
-                showAlert('content', 'Alamat pengiriman harus diisi!', 'error');
-                return;
-            }
-
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            if (!address.trim()) { showModal('Alamat Kosong', 'Alamat pengiriman harus diisi!', 'error'); return; }
             const order = {
                 id: orderHistory.length + 1,
                 userId: currentUser.id,
                 items: [...cart],
-                total: total,
+                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
                 address: address,
-                paymentMethod: paymentMethod,
-                notes: notes,
+                paymentMethod: document.getElementById('payment-method').value,
                 status: 'pending',
-                date: new Date().toLocaleDateString('id-ID', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                })
+                date: new Date().toLocaleDateString('id-ID')
             };
-
-            // Update stock
-            cart.forEach(cartItem => {
-                const product = products.find(p => p.id === cartItem.id);
-                if (product) {
-                    product.stock -= cartItem.quantity;
-                }
-            });
-
+            cart.forEach(cartItem => { const product = products.find(p => p.id === cartItem.id); if (product) product.stock -= cartItem.quantity; });
             orderHistory.push(order);
             cart = [];
-
-            showAlert('content', 'Pesanan berhasil diproses! Terima kasih telah berbelanja.', 'success');
+            showModal('Pesanan Berhasil!', 'Pesanan Anda telah berhasil diproses. Terima kasih telah berbelanja!', 'success');
             saveAppState();
-            setTimeout(() => showOrderHistory(), 2000);
+            setTimeout(showOrderHistory, 2000);
         }
 
         function updateOrderStatus(orderId, newStatus) {
             const order = orderHistory.find(o => o.id === orderId);
             if (order) {
                 order.status = newStatus;
-                showAlert('content', 'Status pesanan berhasil diperbarui!', 'success');
                 saveAppState();
+                showModal('Status Pesanan Diperbarui', `Status pesanan #${orderId} berhasil diubah menjadi ${newStatus}.`, 'success');
+                showOrderManagement(); // Refresh the order management view
+            } else {
+                showModal('Gagal', 'Pesanan tidak ditemukan!', 'error');
             }
         }
 
-        function showAlert(containerId, message, type) {
+
+        // === UTILITY & INITIALIZATION ===
+        // Replaced showAlert with showModal for most cases for a unified pop-up experience
+        function showAlert(containerId, message, type = 'success', duration = 3000) {
             const container = document.getElementById(containerId);
+            if (!container) return;
             const alertDiv = document.createElement('div');
             alertDiv.className = `alert alert-${type}`;
-            alertDiv.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
-                ${message}
-            `;
-            
-            if (containerId === 'content') {
-                container.insertBefore(alertDiv, container.firstChild);
-            } else {
-                const existingAlert = document.getElementById(containerId);
-                existingAlert.innerHTML = '';
-                existingAlert.appendChild(alertDiv);
-                existingAlert.classList.remove('hidden');
+            alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i> ${message}`;
+            container.insertBefore(alertDiv, container.firstChild);
+            setTimeout(() => alertDiv.remove(), duration);
+        }
+
+        // --- Modal Functions ---
+        function showModal(title, message, type = 'info', buttonsHTML = `<button class="btn" onclick="hideModal()">OK</button>`) {
+            const modalOverlay = document.getElementById('myModal');
+            const modalIcon = document.getElementById('modal-icon');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMessage = document.getElementById('modal-message');
+            const modalButtons = document.getElementById('modal-buttons');
+
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            modalButtons.innerHTML = buttonsHTML; // Inject custom buttons or default OK
+
+            // Set icon and its color
+            modalIcon.className = 'modal-icon'; // Reset classes
+            switch (type) {
+                case 'success':
+                    modalIcon.classList.add('fas', 'fa-check-circle', 'success');
+                    break;
+                case 'error':
+                    modalIcon.classList.add('fas', 'fa-times-circle', 'error');
+                    break;
+                case 'warning':
+                    modalIcon.classList.add('fas', 'fa-exclamation-triangle', 'warning');
+                    break;
+                case 'info':
+                default:
+                    modalIcon.classList.add('fas', 'fa-info-circle', 'info');
+                    break;
             }
-            
-            setTimeout(() => {
-                if (alertDiv.parentNode) {
-                    alertDiv.remove();
+
+            modalOverlay.classList.add('visible');
+        }
+
+        function hideModal() {
+            const modalOverlay = document.getElementById('myModal');
+            modalOverlay.classList.remove('visible');
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAppState(); // Muat state aplikasi terlebih dahulu
+            updateUI(); // Perbarui UI (header, navigasi) berdasarkan state
+
+            const loadingScreen = document.getElementById('loading-screen');
+            // Cek apakah loading page sudah pernah ditampilkan di sesi ini
+            const hasShownLoadingPage = sessionStorage.getItem('hasShownLoadingPage');
+
+            if (!hasShownLoadingPage) {
+                // Jika belum pernah ditampilkan (pertama kali atau sesi baru):
+                // Pastikan loading screen terlihat
+                loadingScreen.style.opacity = '1';
+                loadingScreen.classList.remove('hidden'); 
+
+                // Tampilkan loading screen selama 2.5 detik
+                setTimeout(() => {
+                    loadingScreen.style.opacity = '0'; // Mulai animasi fade-out
+                    loadingScreen.addEventListener('transitionend', function handler() {
+                        loadingScreen.classList.add('hidden'); // Sembunyikan setelah fade-out selesai
+                        loadingScreen.removeEventListener('transitionend', handler); // Hapus listener setelah selesai
+                        showInitialPage(); // Tampilkan halaman utama setelah loading
+                    }, { once: true }); // Listener hanya berjalan sekali
+                    sessionStorage.setItem('hasShownLoadingPage', 'true'); // Set flag bahwa loading page sudah ditampilkan
+                }, 2500); // Durasi loading page
+            } else {
+                // Jika sudah pernah ditampilkan di sesi ini (misal karena refresh):
+                // Sembunyikan loading screen secara instan
+                loadingScreen.style.opacity = '0';
+                loadingScreen.classList.add('hidden');
+                showInitialPage(); // Langsung tampilkan halaman utama
+            }
+
+            // Fungsi pembantu untuk menentukan halaman mana yang akan ditampilkan setelah loading selesai
+            function showInitialPage() {
+                if (currentUser) {
+                    if (currentUser.role === 'admin') {
+                        showAdminDashboard();
+                    } else { // currentUser.role === 'user'
+                        // Untuk pengguna yang login, selalu ke homepage utama mereka
+                        showHomepage(); 
+                    }
+                } else { // Tidak ada pengguna saat ini (tamu)
+                    // Jika tamu, periksa halaman terakhir yang disimpan di localStorage.
+                    // Jika tidak ada atau halaman terakhir adalah 'showLandingPage' (nilai default awal),
+                    // atau halaman tersimpan tidak valid, maka tampilkan landing page.
+                    // Jika ada halaman tersimpan yang valid (selain landing page), langsung ke halaman itu.
+                    if (!currentPage || currentPage === 'showLandingPage' || typeof window[currentPage] !== 'function') {
+                        showLandingPage();
+                    } else {
+                        // Coba panggil fungsi untuk halaman yang disimpan
+                        try {
+                            window[currentPage]();
+                        } catch (e) {
+                            console.error("Error navigating to saved page for guest:", e);
+                            showLandingPage(); // Fallback ke landing jika terjadi error
+                        }
+                    }
                 }
-            }, 3000);
-        }
+            }
 
-        function showAddProductForm() {
-            currentPage = 'showAddProductForm';
-            saveAppState();
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <h2 class="section-title"><i class="fas fa-plus-circle"></i> Tambah Produk Baru</h2>
-                <div class="form-container">
-                    <form id="add-product-form">
-                        <div class="form-group">
-                            <label><i class="fas fa-tag"></i> Nama Produk:</label>
-                            <input type="text" id="product-name" required placeholder="Masukkan nama produk">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-money-bill-wave"></i> Harga:</label>
-                            <input type="number" id="product-price" required placeholder="Masukkan harga produk">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-box"></i> Stok:</label>
-                            <input type="number" id="product-stock" required placeholder="Masukkan jumlah stok">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-align-left"></i> Deskripsi:</label>
-                            <textarea id="product-description" rows="4" required placeholder="Masukkan deskripsi produk"></textarea>
-                        </div>
-                        <div class="action-container">
-                            <button type="submit" class="btn">
-                                <i class="fas fa-save"></i> Simpan Produk
-                            </button>
-                            <button type="button" class="btn btn-outline" onclick="showProductManagement()">
-                                <i class="fas fa-times"></i> Batal
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            `;
-
-            document.getElementById('add-product-form').addEventListener('submit', function(e) {
+            document.getElementById('login-form').addEventListener('submit', e => {
                 e.preventDefault();
-                const newProduct = {
-                    id: products.length + 1,
-                    name: document.getElementById('product-name').value,
-                    price: parseInt(document.getElementById('product-price').value),
-                    stock: parseInt(document.getElementById('product-stock').value),
-                    description: document.getElementById('product-description').value,
-                    image: 'https://via.placeholder.com/300x200?text=New+Product'
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                if (!login(username, password)) {
+                    showModal('Login Gagal', 'Username atau password salah!', 'error');
+                }
+            });
+
+            document.getElementById('register-form').addEventListener('submit', e => {
+                e.preventDefault();
+                const userData = {
+                    username: document.getElementById('reg-username').value, password: document.getElementById('reg-password').value,
+                    email: document.getElementById('reg-email').value, name: document.getElementById('reg-name').value
                 };
-                products.push(newProduct);
-                showAlert('content', 'Produk berhasil ditambahkan!', 'success');
-                saveAppState();
-                setTimeout(() => showProductManagement(), 1500);
+                if (register(userData)) {
+                    showModal('Registrasi Berhasil!', 'Akun Anda berhasil didaftarkan. Silakan login.', 'success');
+                    setTimeout(showLogin, 2000);
+                } else {
+                    showModal('Registrasi Gagal', 'Username sudah digunakan!', 'error');
+                }
             });
-        }
-
-        function editProduct(productId) {
-            currentPage = 'editProduct';
-            saveAppState();
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <h2 class="section-title"><i class="fas fa-edit"></i> Edit Produk</h2>
-                <div class="form-container">
-                    <form id="edit-product-form">
-                        <div class="form-group">
-                            <label><i class="fas fa-tag"></i> Nama Produk:</label>
-                            <input type="text" id="edit-product-name" value="${product.name}" required>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-money-bill-wave"></i> Harga:</label>
-                            <input type="number" id="edit-product-price" value="${product.price}" required>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-box"></i> Stok:</label>
-                            <input type="number" id="edit-product-stock" value="${product.stock}" required>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-align-left"></i> Deskripsi:</label>
-                            <textarea id="edit-product-description" rows="4" required>${product.description}</textarea>
-                        </div>
-                        <div class="action-container">
-                            <button type="submit" class="btn">
-                                <i class="fas fa-save"></i> Update Produk
-                            </button>
-                            <button type="button" class="btn btn-outline" onclick="showProductManagement()">
-                                <i class="fas fa-times"></i> Batal
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            `;
-
-            document.getElementById('edit-product-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                product.name = document.getElementById('edit-product-name').value;
-                product.price = parseInt(document.getElementById('edit-product-price').value);
-                product.stock = parseInt(document.getElementById('edit-product-stock').value);
-                product.description = document.getElementById('edit-product-description').value;
-                
-                showAlert('content', 'Produk berhasil diperbarui!', 'success');
-                saveAppState();
-                setTimeout(() => showProductManagement(), 1500);
-            });
-        }
-
-        function deleteProduct(productId) {
-            if (confirm('Apakah Anda yakin ingin menghapus produk ini?')) {
-                products = products.filter(p => p.id !== productId);
-                showAlert('content', 'Produk berhasil dihapus!', 'success');
-                saveAppState();
-                setTimeout(() => showProductManagement(), 1500);
-            }
-        }
-
-        function showOrderDetail(orderId) {
-            currentPage = 'showOrderDetail';
-            saveAppState();
-            const order = orderHistory.find(o => o.id === orderId);
-            if (!order) return;
-
-            const customer = users.find(u => u.id === order.userId);
-            
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <h2 class="section-title"><i class="fas fa-file-invoice"></i> Detail Pesanan #${order.id}</h2>
-                <div class="detail-card">
-                    <h3 style="margin-bottom: 20px; color: #4a5568;"><i class="fas fa-info-circle"></i> Informasi Pesanan</h3>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
-                        <div>
-                            <h4 style="margin-bottom: 10px; color: #4a5568;">Detail Pesanan</h4>
-                            <p><strong>ID Pesanan:</strong> #${order.id}</p>
-                            <p><strong>Tanggal:</strong> ${order.date}</p>
-                            <p><strong>Status:</strong> 
-                                <span style="padding: 5px 12px; border-radius: 20px; background: ${
-                                    order.status === 'pending' ? '#fef3c7' : 
-                                    order.status === 'processing' ? '#dbeafe' : 
-                                    order.status === 'shipped' ? '#fce7f3' : 
-                                    '#dcfce7'}; 
-                                    color: ${
-                                    order.status === 'pending' ? '#92400e' : 
-                                    order.status === 'processing' ? '#1e40af' : 
-                                    order.status === 'shipped' ? '#9d174d' : 
-                                    '#166534'};">
-                                    ${order.status}
-                                </span>
-                            </p>
-                            <p><strong>Total Pembayaran:</strong> Rp ${order.total.toLocaleString('id-ID')}</p>
-                        </div>
-                        
-                        <div>
-                            <h4 style="margin-bottom: 10px; color: #4a5568;">Informasi Pengiriman</h4>
-                            <p><strong>Nama Penerima:</strong> ${customer ? customer.name : 'Unknown'}</p>
-                            <p><strong>Alamat:</strong> ${order.address}</p>
-                            <p><strong>Metode Pembayaran:</strong> ${order.paymentMethod}</p>
-                            ${order.notes ? `<p><strong>Catatan:</strong> ${order.notes}</p>` : ''}
-                        </div>
-                    </div>
-                    
-                    <h3 style="margin: 30px 0 20px; color: #4a5568;"><i class="fas fa-shopping-cart"></i> Item Pesanan</h3>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Produk</th>
-                                <th>Harga Satuan</th>
-                                <th>Jumlah</th>
-                                <th>Subtotal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${order.items.map(item => `
-                                <tr>
-                                    <td>${item.name}</td>
-                                    <td>Rp ${item.price.toLocaleString('id-ID')}</td>
-                                    <td>${item.quantity}</td>
-                                    <td>Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                    
-                    <div class="action-container">
-                        <button class="btn" onclick="showOrderHistory()">
-                            <i class="fas fa-arrow-left"></i> Kembali ke History
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Event Listeners
-        document.getElementById('login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            if (login(username, password)) {
-                showHomepage();
-            } else {
-                showAlert('login-alert', 'Username atau password salah!', 'error');
-            }
-        });
-
-        document.getElementById('register-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const userData = {
-                username: document.getElementById('reg-username').value,
-                password: document.getElementById('reg-password').value,
-                email: document.getElementById('reg-email').value,
-                name: document.getElementById('reg-name').value
-            };
-            
-            if (register(userData)) {
-                showAlert('register-alert', 'Registrasi berhasil! Silakan login.', 'success');
-                setTimeout(() => showLogin(), 2000);
-            } else {
-                showAlert('register-alert', 'Username sudah digunakan!', 'error');
-            }
-        });
-
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', function() {
-            loadAppState();
-            
-            // If not logged in, show login page
-            if (!currentUser) {
-                showLogin();
-            }
         });
     </script>
 </body>
